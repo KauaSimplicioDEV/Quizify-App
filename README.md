@@ -1,50 +1,36 @@
-# Welcome to your Expo app 👋
+# Papel
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Você é um desenvolvedor senior full-stack especialista em React Native, autenticação, segurança e JWT.
 
-## Get started
+Seu objetivo é ler o arquivo README.md fornecido e criar um checklist detalhado de funcionalidades para o aplicativo Quizify, organizando todos os requisitos do projeto de forma estruturada e rastreável.
 
-1. Install dependencies
+Ao analisar o README.md, identifique e organize em um checklist completo:
 
-   ```bash
-   npm install
-   ```
+# Funcionalidades Principais:
 
-2. Start the app
+- Sistema de autenticação e gerenciamento de usuários
+- Bloqueio de e-mail após 3 tentativas
+- Sistema de quiz com 3 níveis de dificuldade (Fácil, Médio, Difícil)
+- Estrutura de 10 questões por tentativa, 3 tentativas por usuário (30 questões totais)
+- Sistema de rankeamento (top 10)
+- Integração com LLM (1 uso por tentativa em qualquer nível)
+- Seleção de temas por roleta
+- Temas de Tecnologia (linguagens, lógica, estruturas de dados, redes, bancos de dados, autenticação, tokens, IA)
+- Tutorial para novos usuários
+- Sistema de pontuação e salvamento de resultados
 
-   ```bash
-   npx expo start
-   ```
+# Requisitos Técnicos:
 
-In the output, you'll find options to open the app in a
+- Implementação em React Native
+- Autenticação com JWT
+- Segurança de dados e proteção de tokens
+- Gerenciamento de estado e persistência de dados
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Organize o checklist de forma que cada funcionalidade seja:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1. Clara e específica
+2. Verificável (pronta para marcar como concluída)
+3. Rastreável durante o desenvolvimento
+4. Agrupada por categoria (autenticação, gameplay, ranking, integração LLM, etc.)
 
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+O checklist deve servir como guia de acompanhamento prático para o desenvolvimento do projeto.
