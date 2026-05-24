@@ -1,6 +1,11 @@
 import type { Href } from 'expo-router';
 
-/** Rotas usadas fora dos componentes Link; `as Href` até o gerador de rotas incluir `(auth)`. */
+/** Rotas usadas fora dos componentes Link; `as Href` até o gerador de rotas atualizar. */
 export const AUTH_LOGIN = '/(auth)/login' as Href;
 export const TABS_ROOT = '/(tabs)' as Href;
 export const INTRO_ROUTE = '/intro' as Href;
+export const ONBOARDING_ROUTE = '/onboarding' as Href;
+
+export const QUIZ_WHEEL_ROUTE = '/quiz/wheel' as Href;
+export const QUIZ_PLAY_ROUTE = '/quiz/play' as Href;
+export const QUIZ_RESULT_ROUTE = '/quiz/result' as Href;

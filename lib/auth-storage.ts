@@ -8,6 +8,8 @@ const USED_NAMES_KEY = 'quizify_used_names_json';
 export type StoredUser = {
   id: string;
   name: string;
+  /** Opcional: presente quando o usuário vem do fluxo de e-mail/senha (A-01..A-05). */
+  email?: string;
 };
 
 function normalizePlayerName(name: string): string {

@@ -1,8 +1,10 @@
 import { AuthHeroBackground } from '@/components/auth/auth-hero-background';
 import { AuthPillButton } from '@/components/auth/auth-pill-button';
 import { AuthTextField } from '@/components/auth/auth-text-field';
+import { CONTENT_MAX_WIDTH } from '@/constants/layout';
 import { AuthHero } from '@/constants/auth-hero-theme';
 import { useAuth } from '@/contexts/auth-context';
+import { useResponsive } from '@/hooks/use-responsive';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import {
@@ -18,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 export default function LoginScreen() {
   const insets = useSafeAreaInsets();
   const { identify } = useAuth();
+  const { scaleFont, horizontalPadding } = useResponsive();
 
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
@@ -61,12 +64,18 @@ export default function LoginScreen() {
         <ScrollView
           contentContainerStyle={[
             styles.scroll,
-            { paddingTop: insets.top + 20, paddingBottom: insets.bottom + 28 },
+            {
+              paddingTop: insets.top + 20,
+              paddingBottom: insets.bottom + 28,
+              paddingHorizontal: horizontalPadding,
+            },
           ]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}>
-          <Text style={styles.logo}>Quizify</Text>
-          <Text style={styles.tagline}>Antes de jogar, diga seu nome</Text>
+          <Text style={[styles.logo, { fontSize: scaleFont(42) }]}>Quizify</Text>
+          <Text style={[styles.tagline, { fontSize: scaleFont(17) }]}>
+            Antes de jogar, diga seu nome
+          </Text>
 
           <AuthTextField
             variant="hero"
@@ -103,9 +112,12 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  scroll: { paddingHorizontal: 24, maxWidth: 480, width: '100%', alignSelf: 'center' },
+  scroll: {
+    maxWidth: CONTENT_MAX_WIDTH.auth,
+    width: '100%',
+    alignSelf: 'center',
+  },
   logo: {
-    fontSize: 42,
     fontWeight: '900',
     textAlign: 'center',
     color: AuthHero.logoYellow,
@@ -116,7 +128,6 @@ const styles = StyleSheet.create({
     textShadowRadius: 1,
   },
   tagline: {
-    fontSize: 17,
     fontWeight: '600',
     textAlign: 'center',
     color: AuthHero.subtitle,

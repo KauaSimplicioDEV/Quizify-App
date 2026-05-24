@@ -1,5 +1,6 @@
 import { GlassCard } from '@/components/home/glass-card';
 import { HomeTheme } from '@/constants/home-theme';
+import { useResponsive } from '@/hooks/use-responsive';
 import { StyleSheet, Text, View } from 'react-native';
 
 type Step = {
@@ -12,15 +13,15 @@ type Step = {
 const STEPS: Step[] = [
   {
     id: '1',
-    icon: '🎯',
-    title: 'Escolha um nível',
-    description: 'Fácil, Médio ou Difícil — você decide o desafio.',
+    icon: '🎡',
+    title: 'Sorteie um tema',
+    description: 'A roleta escolhe a área de Tecnologia para você.',
   },
   {
     id: '2',
     icon: '❓',
-    title: 'Responda às perguntas',
-    description: 'Cada quiz tem perguntas de múltipla escolha.',
+    title: 'Responda 10 questões',
+    description: 'Mix de dificuldades: 4 fáceis, 4 médias e 2 difíceis.',
   },
   {
     id: '3',
@@ -37,11 +38,13 @@ const STEPS: Step[] = [
 ];
 
 export function HowItWorksCard() {
+  const { scaleFont } = useResponsive();
+
   return (
     <GlassCard style={styles.card}>
       <View style={styles.headerRow}>
-        <Text style={styles.title}>Como funciona</Text>
-        <Text style={styles.subtitle}>Em 4 passos simples</Text>
+        <Text style={[styles.title, { fontSize: scaleFont(18) }]}>Como funciona</Text>
+        <Text style={[styles.subtitle, { fontSize: scaleFont(12) }]}>Em 4 passos simples</Text>
       </View>
 
       <View style={styles.stepsList}>

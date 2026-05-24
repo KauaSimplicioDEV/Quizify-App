@@ -16,7 +16,8 @@ import {
   saveSession,
   type StoredUser,
 } from '@/lib/auth-storage';
-import { AUTH_LOGIN, TABS_ROOT } from '@/lib/routes';
+import { AUTH_LOGIN, ONBOARDING_ROUTE, TABS_ROOT } from '@/lib/routes';
+import { hasSeenTutorial } from '@/lib/tutorial';
 
 type AuthContextValue = {
   user: StoredUser | null;
@@ -67,13 +68,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Mantém compatibilidade com o restante do app que ainda espera um token salvo.
     await saveSession('local-name-session', user);
     setUser(user);
-    router.replace(TABS_ROOT);
+
+    const seenTutorial = await hasSeenTutorial(user.id);
+    router.replace(seenTutorial ? TABS_ROOT : ONBOARDING_ROUTE);
   }, []);
 
   const signOut = useCallback(async () => {
-    await clearSession();
-    setUser(null);
-    router.replace(AUTH_LOGIN);
+    try {
+      await clearSession();
+    } finally {
+      setUser(null);
+      // Tabs redirecionam quando `user === null`; replace garante saída também no web.
+      router.replace(AUTH_LOGIN);
+    }
   }, []);
 
   const value = useMemo(
