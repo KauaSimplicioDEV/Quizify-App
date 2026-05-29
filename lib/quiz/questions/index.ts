@@ -10,7 +10,7 @@ import { LOGIC_QUESTIONS } from './logic';
 import { NETWORKS_QUESTIONS } from './networks';
 
 /**
- * Banco completo de questões (C-02, C-03, G-04).
+ * Banco completo de questões (C-02, G-04).
  *
  * Cobertura por tema (`G-04` - 30 totais = 3 níveis × 10):
  * - languages, logic, data-structures, networks, databases, auth-tokens, ai
@@ -40,10 +40,6 @@ function shuffleArray<T>(arr: readonly T[]): T[] {
  *
  * Sequência: 2 fáceis → 2 médias → 2 difíceis → 2 fáceis → 2 médias.
  * Resultado: 4 fáceis + 4 médias + 2 difíceis, sempre nessa ordem.
- *
- * Mantemos este padrão como **fonte da verdade do cliente** mesmo quando o
- * backend (`quiz-api.ts`) fornecer as questões — ele deve devolvê-las já nesta
- * ordem. Em modo offline, `pickMixedQuestions` segue exatamente este padrão.
  */
 export const QUIZ_LEVEL_PATTERN: readonly QuizLevel[] = [
   'easy',
@@ -60,9 +56,6 @@ export const QUIZ_LEVEL_PATTERN: readonly QuizLevel[] = [
 
 /**
  * Devolve até `count` questões aleatórias do `themeId` e `level` informados.
- *
- * Utilitário interno: a UX principal usa `pickMixedQuestions`. Mantido para
- * cenários como testes ou banco isolado.
  */
 export function pickQuestions(
   themeId: QuizThemeId,
@@ -74,13 +67,7 @@ export function pickQuestions(
 }
 
 /**
- * Monta uma tentativa misturando dificuldades segundo `QUIZ_LEVEL_PATTERN`
- * (4 fáceis + 4 médias + 2 difíceis, intercaladas).
- *
- * - Pega `pattern.length` questões do banco, respeitando o nível de cada slot.
- * - Embaralha o pool de cada nível antes de selecionar, garantindo variação.
- * - Se algum nível tiver menos questões que o necessário, repete questões já
- *   sorteadas para preservar a contagem (acontece apenas se o banco encolher).
+ * Monta uma tentativa misturando dificuldades de um único tema (legado / testes).
  */
 export function pickMixedQuestions(
   themeId: QuizThemeId,
@@ -90,6 +77,32 @@ export function pickMixedQuestions(
     easy: shuffleArray(QUESTION_BANK.filter((q) => q.themeId === themeId && q.level === 'easy')),
     medium: shuffleArray(QUESTION_BANK.filter((q) => q.themeId === themeId && q.level === 'medium')),
     hard: shuffleArray(QUESTION_BANK.filter((q) => q.themeId === themeId && q.level === 'hard')),
+  };
+
+  const cursor: Record<QuizLevel, number> = { easy: 0, medium: 0, hard: 0 };
+  const out: QuizQuestion[] = [];
+
+  for (const level of pattern) {
+    const pool = pools[level];
+    if (pool.length === 0) continue;
+    const idx = cursor[level] % pool.length;
+    cursor[level] += 1;
+    out.push(pool[idx]!);
+  }
+  return out;
+}
+
+/**
+ * Monta 10 questões mistas a partir de **todo o banco** (vários assuntos).
+ * O tema fica implícito no texto de cada pergunta — alinhado ao fluxo com backend.
+ */
+export function pickMixedQuestionsFromBank(
+  pattern: readonly QuizLevel[] = QUIZ_LEVEL_PATTERN
+): QuizQuestion[] {
+  const pools: Record<QuizLevel, QuizQuestion[]> = {
+    easy: shuffleArray(QUESTION_BANK.filter((q) => q.level === 'easy')),
+    medium: shuffleArray(QUESTION_BANK.filter((q) => q.level === 'medium')),
+    hard: shuffleArray(QUESTION_BANK.filter((q) => q.level === 'hard')),
   };
 
   const cursor: Record<QuizLevel, number> = { easy: 0, medium: 0, hard: 0 };

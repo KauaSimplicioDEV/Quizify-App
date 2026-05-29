@@ -10,7 +10,6 @@ import { useQuiz } from '@/contexts/quiz-context';
 import { useResponsive } from '@/hooks/use-responsive';
 import { requestHint, type HintResult } from '@/lib/quiz/llm';
 import { requestRemoteHint } from '@/lib/quiz/quiz-api';
-import { getThemeById } from '@/lib/quiz/themes';
 import { TABS_ROOT } from '@/lib/routes';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useFocusEffect } from 'expo-router';
@@ -71,12 +70,7 @@ export default function PlayScreen() {
     return attempt.questions[attempt.index] ?? null;
   }, [attempt]);
 
-  const theme = useMemo(() => {
-    if (!attempt) return null;
-    return getThemeById(attempt.themeId) ?? null;
-  }, [attempt]);
-
-  if (!attempt || !currentQuestion || !theme) {
+  if (!attempt || !currentQuestion) {
     return (
       <View style={styles.root}>
         <LinearGradient colors={[...HomeTheme.pageGradient]} style={StyleSheet.absoluteFill} />
@@ -164,7 +158,6 @@ export default function PlayScreen() {
 
       <ScreenScroll withTabBar={false} topExtra={12}>
         <QuizHeader
-          theme={theme}
           currentLevel={currentQuestion.level}
           questionIndex={attempt.index}
           totalQuestions={attempt.questions.length}

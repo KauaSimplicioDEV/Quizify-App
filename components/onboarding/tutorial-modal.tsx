@@ -6,7 +6,7 @@ import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 
 /**
  * Tutorial guiado (O-02):
- * passos cobrindo auth (identificação), nível, roleta, quiz, LLM e ranking.
+ * passos cobrindo auth (identificação), quiz, LLM e ranking.
  *
  * Aceita `onFinish` (gravar flag, fechar) e `onSkip` (mesma ação, mas
  * tipicamente sem celebrar) — também grava a flag para não reaparecer.
@@ -25,27 +25,22 @@ const STEPS: { emoji: string; title: string; body: string }[] = [
   },
   {
     emoji: '🎯',
-    title: '2. Dificuldades mistas',
-    body: 'Cada tentativa tem 4 fáceis, 4 médias e 2 difíceis — o nível de cada questão define os pontos.',
-  },
-  {
-    emoji: '🎡',
-    title: '3. Gire a roleta',
-    body: 'A roleta sorteia o tema (Linguagens, Redes, IA, etc.). Depois é só responder!',
+    title: '2. Toque em Jogar',
+    body: 'Você recebe 10 perguntas de tecnologia. O assunto aparece no texto de cada questão.',
   },
   {
     emoji: '❓',
-    title: '4. Responda as 10 questões',
-    body: 'Cada questão tem 25s. Quanto mais rápido acertar, mais pontos você ganha.',
+    title: '3. Responda as 10 questões',
+    body: 'Mix de dificuldades (4 fáceis, 4 médias, 2 difíceis). Cada questão tem 25s — seja rápido!',
   },
   {
     emoji: '💡',
-    title: '5. Uma dica por tentativa',
+    title: '4. Uma dica por tentativa',
     body: 'Em qualquer questão você pode pedir uma dica para a IA — mas só uma vez por tentativa.',
   },
   {
     emoji: '🏆',
-    title: '6. Suba no ranking',
+    title: '5. Suba no ranking',
     body: 'Top 10 global, com base na sua melhor pontuação. Você tem 3 tentativas por dia.',
   },
 ];

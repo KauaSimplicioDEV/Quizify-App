@@ -9,17 +9,12 @@ import React, {
 
 import type { QuizQuestion } from '@/lib/quiz/questions';
 import { scoreForQuestion } from '@/lib/quiz/scoring';
-import type { QuizThemeId } from '@/lib/quiz/themes';
 
 /**
  * Estado em memória de uma tentativa em andamento.
  *
- * - **G-02**: 10 questões por tentativa.
- * - **G-04**: tentativa mista (4 fáceis + 4 médias + 2 difíceis intercaladas);
- *   o nível fica em cada `QuizQuestion`, não na tentativa.
- * - **G-05**: feedback é dado por questão (`submitAnswer` retorna se acertou)
- *   e também consolidado em `result.tsx` ao final.
- * - **L-02**: `llmUsed` garante exatamente um uso de LLM por tentativa.
+ * O assunto de cada questão vem do texto da pergunta (backend/OpenAI).
+ * Não há seleção de tema pelo usuário.
  */
 
 export type AnswerLog = {
@@ -31,7 +26,6 @@ export type AnswerLog = {
 };
 
 export type QuizAttemptState = {
-  themeId: QuizThemeId;
   /** Identificador opcional vindo do backend (`POST /quiz/start`). */
   remoteAttemptId?: string;
   questions: QuizQuestion[];
@@ -45,7 +39,6 @@ export type QuizAttemptState = {
 };
 
 type StartArgs = {
-  themeId: QuizThemeId;
   questions: QuizQuestion[];
   remoteAttemptId?: string;
 };
@@ -64,7 +57,6 @@ type QuizContextValue = {
   advance: () => boolean;
   reset: () => void;
   markLlmUsed: () => void;
-  /** Total de questões respondidas, acertos e tempo total. */
   totals: () => { questions: number; correct: number; durationMs: number };
 };
 
@@ -75,10 +67,9 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
   const attemptRef = useRef<QuizAttemptState | null>(null);
   attemptRef.current = attempt;
 
-  const start = useCallback(({ themeId, questions, remoteAttemptId }: StartArgs): QuizAttemptState => {
+  const start = useCallback(({ questions, remoteAttemptId }: StartArgs): QuizAttemptState => {
     const now = Date.now();
     const next: QuizAttemptState = {
-      themeId,
       remoteAttemptId,
       questions,
       index: 0,
@@ -106,7 +97,6 @@ export function QuizProvider({ children }: { children: React.ReactNode }) {
       }
 
       const correct = selectedIndex !== null && selectedIndex === question.correctIndex;
-      // G-06: a pontuação respeita o nível **da questão** (mista por tentativa).
       const scoreEarned = scoreForQuestion({
         correct,
         level: question.level,

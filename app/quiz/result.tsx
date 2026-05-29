@@ -6,8 +6,8 @@ import { useResponsive } from '@/hooks/use-responsive';
 import { recordAttempt, submitToRanking, type RemoteAttempt } from '@/lib/quiz/quiz-api';
 import { QUIZ_LEVEL_PATTERN } from '@/lib/quiz/questions';
 import { maxScoreForLevel } from '@/lib/quiz/scoring';
-import { getThemeById } from '@/lib/quiz/themes';
-import { TABS_ROOT } from '@/lib/routes';
+import { QUIZ_START_ROUTE, TABS_ROOT } from '@/lib/routes';
+import type { QuizThemeId } from '@/lib/quiz/themes';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -41,9 +41,12 @@ export default function ResultScreen() {
 
     void (async () => {
       try {
+        const sessionThemeId =
+          (attempt.questions[0]?.themeId as QuizThemeId | undefined) ?? 'languages';
+
         const saved = await recordAttempt({
           userId: user.id,
-          themeId: attempt.themeId,
+          themeId: sessionThemeId,
           level: 'mixed',
           score: attempt.score,
           correctCount,
@@ -58,7 +61,7 @@ export default function ResultScreen() {
           attemptId: saved.id,
           userId: user.id,
           userName: user.name,
-          themeId: attempt.themeId,
+          themeId: sessionThemeId,
           level: 'mixed',
           score: attempt.score,
           durationMs,
@@ -103,7 +106,6 @@ export default function ResultScreen() {
     );
   }
 
-  const theme = getThemeById(attempt.themeId);
   const correctCount = attempt.answers.filter((a) => a.correct).length;
   const totalQuestions = attempt.questions.length;
   const accuracyPct = Math.round((correctCount / totalQuestions) * 100);
@@ -118,7 +120,7 @@ export default function ResultScreen() {
 
   const handleAgain = () => {
     reset();
-    router.replace({ pathname: '/quiz/wheel' });
+    router.replace(QUIZ_START_ROUTE);
   };
 
   const handleHome = () => {
@@ -154,9 +156,7 @@ export default function ResultScreen() {
           <Text style={styles.mixRow}>
             🟢 {breakdown.easy} fáceis · 🟡 {breakdown.medium} médias · 🔴 {breakdown.hard} difíceis
           </Text>
-          <Text style={styles.mixHint}>
-            Tema: {theme?.emoji ?? '❔'} {theme?.name ?? '—'} · {QUIZ_LEVEL_PATTERN.length} questões
-          </Text>
+          <Text style={styles.mixHint}>{QUIZ_LEVEL_PATTERN.length} questões · assuntos variados</Text>
         </View>
 
         <View style={styles.rankCard}>
@@ -180,7 +180,7 @@ export default function ResultScreen() {
         <Pressable
           onPress={handleAgain}
           style={({ pressed }) => [styles.primaryBtn, { opacity: pressed ? 0.9 : 1 }]}>
-          <Text style={styles.primaryBtnText}>Tentar novo tema</Text>
+          <Text style={styles.primaryBtnText}>Jogar novamente</Text>
         </Pressable>
 
         <Pressable

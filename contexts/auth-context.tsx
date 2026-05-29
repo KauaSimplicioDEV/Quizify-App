@@ -16,6 +16,7 @@ import {
   saveSession,
   type StoredUser,
 } from '@/lib/auth-storage';
+import { runOneTimeUserDataWipe } from '@/lib/reset-local-data';
 import { AUTH_LOGIN, ONBOARDING_ROUTE, TABS_ROOT } from '@/lib/routes';
 import { hasSeenTutorial } from '@/lib/tutorial';
 
@@ -36,6 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let cancelled = false;
     (async () => {
       try {
+        await runOneTimeUserDataWipe();
         const stored = await getStoredUser();
         if (!cancelled && stored) {
           setUser(stored);

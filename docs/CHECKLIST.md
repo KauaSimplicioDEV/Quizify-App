@@ -39,7 +39,7 @@ Guia de acompanhamento prático derivado dos requisitos do projeto. Marque `- [ 
 
 ## Gameplay do quiz (G)
 
-- [x] **G-01** Botão de jogar geral na tela inicial. _`PlayNowCard` em `(tabs)/index.tsx` — um único botão "Jogar" que abre a roleta de temas. Sem mais separação por nível na Home._
+- [x] **G-01** Botão de jogar geral na tela inicial. _`PlayNowCard` → `app/quiz/start.tsx` (splash + carregamento) → `play.tsx`. Sem roleta nem escolha de tema._
 - [x] **G-02** **10 questões por tentativa** com fluxo claro até o fim da tentativa. _`startQuiz` em `lib/quiz/quiz-api.ts` devolve 10 questões (do backend ou fallback local); `app/quiz/play.tsx` percorre `questions[index]` com timer e feedback._
 - [x] **G-03** **Até 3 tentativas por usuário** (critério: por quiz, por dia ou global — definido e implementado). _Decisão: **3 tentativas por dia**, reset à meia-noite local. No app, `lib/quiz/attempts.ts` + UI em Home/Roleta/Perfil. No backend, `GET /attempts/status` e `429` em `POST /quiz/start`._
 - [x] **G-04** Coerência com **30 questões totais** (3 × 10) no modelo de dados e na UX. _Banco em `lib/quiz/questions/*` mantém 30 por tema. **Cada tentativa é mista**: padrão `QUIZ_LEVEL_PATTERN` = 2 fáceis → 2 médias → 2 difíceis → 2 fáceis → 2 médias (4f + 4m + 2d). `pickMixedQuestions` faz o sorteio local; o backend deve respeitar o mesmo `pattern` em `POST /quiz/start`._
@@ -51,7 +51,7 @@ Guia de acompanhamento prático derivado dos requisitos do projeto. Marque `- [ 
 
 ## Temas e conteúdo (C)
 
-- [x] **C-01** **Seleção de tema por roleta** (ou equivalente visual) integrada ao fluxo do quiz. _`components/quiz/theme-wheel.tsx` (Reanimated) + tela `app/quiz/wheel.tsx`._
+- [x] **C-01** ~~Roleta de temas~~ **Removido** — assunto no texto da pergunta. Fluxo: `app/quiz/start.tsx` (splash) → `play.tsx`._
 - [x] **C-02** Cobertura de temas de **Tecnologia**: linguagens, lógica, estruturas de dados, redes, bancos de dados, autenticação, tokens, IA. _Definidos em `lib/quiz/themes.ts` (7 temas)._
 - [x] **C-03** Mapeamento tema → conjunto de questões utilizável na montagem das 10 questões. _Banco em `lib/quiz/questions/*` indexado por `themeId` + `level`; `pickQuestions` seleciona 10 aleatórias._
 
@@ -77,7 +77,7 @@ Guia de acompanhamento prático derivado dos requisitos do projeto. Marque `- [ 
 ## Onboarding e tutorial (O)
 
 - [x] **O-01** Detecção de novo usuário (primeiro acesso ou flag persistida). _Flag por `userId` em `lib/tutorial.ts`; `auth-context.tsx` redireciona para `/onboarding` quando a flag está ausente._
-- [x] **O-02** Tutorial guiando: auth, nível, roleta, quiz, LLM, ranking (passos acordados). _`components/onboarding/tutorial-modal.tsx` com 7 passos cobrindo o fluxo completo._
+- [x] **O-02** Tutorial guiando: auth, jogar, quiz, LLM, ranking. _`components/onboarding/tutorial-modal.tsx` (6 passos, sem roleta)._
 - [x] **O-03** Opções "pular tutorial" e "rever tutorial" (ex.: em configurações). _Botão "Pular tutorial" no próprio modal; "↻ Rever tutorial" disponível no Perfil._
 
 ---

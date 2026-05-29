@@ -6,7 +6,7 @@ import { HomeTheme } from '@/constants/home-theme';
 import { useAuth } from '@/contexts/auth-context';
 import { useQuiz } from '@/contexts/quiz-context';
 import { getAttemptsStatus, type AttemptsStatus } from '@/lib/quiz/quiz-api';
-import { QUIZ_WHEEL_ROUTE } from '@/lib/routes';
+import { QUIZ_START_ROUTE } from '@/lib/routes';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router, useFocusEffect } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -34,9 +34,9 @@ export default function HomeScreen() {
 
   if (!user) return null;
 
-  const goToWheel = () => {
+  const goToQuiz = () => {
     reset();
-    router.push(QUIZ_WHEEL_ROUTE);
+    router.push(QUIZ_START_ROUTE);
   };
 
   return (
@@ -45,7 +45,7 @@ export default function HomeScreen() {
       <LinearGradient colors={[...HomeTheme.pageGradient]} style={StyleSheet.absoluteFill} />
       <ScreenScroll>
         <HomeHeader user={user} />
-        <PlayNowCard status={status} onPlay={goToWheel} />
+        <PlayNowCard status={status} onPlay={goToQuiz} />
         <HowItWorksCard />
       </ScreenScroll>
     </View>

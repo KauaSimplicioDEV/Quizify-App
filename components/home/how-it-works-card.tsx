@@ -13,9 +13,9 @@ type Step = {
 const STEPS: Step[] = [
   {
     id: '1',
-    icon: '🎡',
-    title: 'Sorteie um tema',
-    description: 'A roleta escolhe a área de Tecnologia para você.',
+    icon: '🎯',
+    title: 'Toque em Jogar',
+    description: 'Inicie o quiz e receba 10 perguntas na hora.',
   },
   {
     id: '2',

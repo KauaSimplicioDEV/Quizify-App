@@ -10,7 +10,7 @@ export type QuizTheme = {
   name: string;
   emoji: string;
   description: string;
-  /** Cor de destaque usada na roleta e em UI relacionada. */
+  /** Cor de destaque em UI relacionada (ranking, histórico). */
   color: string;
 };
 

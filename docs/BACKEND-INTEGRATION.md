@@ -73,10 +73,10 @@ backend quanto no app quando a API estiver pronta.
 
 `POST /quiz/start` (auth obrigatória)
 
-**Request**
+**Request** — o backend sorteia/gera as questões (OpenAI); **não** há `themeId` no cliente. O assunto fica no texto de cada pergunta.
+
 ```json
 {
-  "themeId": "languages",
   "count": 10,
   "pattern": ["easy", "easy", "medium", "medium", "hard", "hard", "easy", "easy", "medium", "medium"]
 }
@@ -284,7 +284,7 @@ Detalhe `correctRate` é em **porcentagem inteira** (0..100).
 - [ ] (Recomendado) Rodar `npx expo start --clear` para garantir que o bundler pegue o env novo.
 - [ ] Testar:
   - [ ] Login e cadastro → 401 expulsam do app, 423 mostra "conta bloqueada".
-  - [ ] `Jogar` → roleta sorteia tema → `POST /quiz/start` → 10 questões na ordem `pattern`.
+  - [ ] `Jogar` → splash → `POST /quiz/start` → 10 questões na ordem `pattern`.
   - [ ] Concluir tentativa → `POST /attempts` → resultado mostra rank atualizado.
   - [ ] Aba **Ranking** consome `GET /ranking/top` (top 10) e `GET /ranking/me` (sua posição).
   - [ ] Aba **Perfil** mostra stats vindos de `GET /attempts/me/stats` e tentativas em `/attempts/status`.

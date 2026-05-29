@@ -17,7 +17,6 @@ export type ResponsiveLayout = {
   horizontalPadding: number;
   /** Multiplicador de fonte (~15% maior no tablet). */
   fontScale: number;
-  wheelSize: number;
   trophyColumns: number;
   trophyCardWidth: number;
   tabBarMaxWidth: number;
@@ -50,13 +49,6 @@ export function useResponsive(): ResponsiveLayout {
     const horizontalPadding = isLargeTablet ? 48 : isTablet ? 32 : 20;
     const fontScale = isTablet ? 1.15 : 1;
 
-    const wheelSize = Math.round(
-      Math.min(
-        isLargeTablet ? 400 : isTablet ? 340 : 280,
-        shortEdge * (isTablet ? (isLandscape ? 0.42 : 0.48) : 0.72)
-      )
-    );
-
     const trophyColumns = isLargeTablet ? 4 : isTablet ? 3 : 2;
     const trophyGap = 12;
     const innerWidth = Math.min(width, contentMaxWidth);
@@ -83,7 +75,6 @@ export function useResponsive(): ResponsiveLayout {
       contentMaxWidth,
       horizontalPadding,
       fontScale,
-      wheelSize,
       trophyColumns,
       trophyCardWidth,
       tabBarMaxWidth: TAB_BAR_MAX_WIDTH,

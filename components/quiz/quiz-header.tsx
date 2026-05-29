@@ -1,9 +1,8 @@
 import { HomeTheme } from '@/constants/home-theme';
-import { QUIZ_LEVEL_META, type QuizLevel, type QuizTheme } from '@/lib/quiz/themes';
+import { QUIZ_LEVEL_META, type QuizLevel } from '@/lib/quiz/themes';
 import { StyleSheet, Text, View } from 'react-native';
 
 type Props = {
-  theme: QuizTheme;
   /** Nível da questão atual (varia ao longo da tentativa mista). */
   currentLevel: QuizLevel;
   questionIndex: number;
@@ -11,16 +10,13 @@ type Props = {
   score: number;
 };
 
-export function QuizHeader({ theme, currentLevel, questionIndex, totalQuestions, score }: Props) {
+export function QuizHeader({ currentLevel, questionIndex, totalQuestions, score }: Props) {
   const meta = QUIZ_LEVEL_META[currentLevel];
 
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
-        <View style={[styles.pill, { backgroundColor: theme.color + '22', borderColor: theme.color }]}>
-          <Text style={styles.pillEmoji}>{theme.emoji}</Text>
-          <Text style={styles.pillText}>{theme.name}</Text>
-        </View>
+        <Text style={styles.brand}>Quizify</Text>
         <View style={[styles.pill, { backgroundColor: meta.color + '22', borderColor: meta.color }]}>
           <Text style={styles.pillEmoji}>{meta.emoji}</Text>
           <Text style={styles.pillText}>{meta.label}</Text>
@@ -48,7 +44,18 @@ export function QuizHeader({ theme, currentLevel, questionIndex, totalQuestions,
 
 const styles = StyleSheet.create({
   container: { gap: 10 },
-  topRow: { flexDirection: 'row', justifyContent: 'space-between', gap: 8 },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 8,
+  },
+  brand: {
+    color: HomeTheme.yellow,
+    fontWeight: '900',
+    fontSize: 18,
+    letterSpacing: 0.5,
+  },
   pill: {
     flexDirection: 'row',
     alignItems: 'center',

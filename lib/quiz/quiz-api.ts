@@ -12,7 +12,7 @@
 
 import { authorizedFetch, ApiClientError } from '@/lib/api-client';
 import { getApiBase } from '@/lib/api-config';
-import { QUIZ_LEVEL_PATTERN, pickMixedQuestions } from '@/lib/quiz/questions';
+import { QUIZ_LEVEL_PATTERN, pickMixedQuestionsFromBank } from '@/lib/quiz/questions';
 import type { QuizQuestion } from '@/lib/quiz/questions/types';
 import {
   type StoredAttempt,
@@ -132,7 +132,6 @@ function mapHttpError(status: number, fallbackMessage = 'Falha de comunicação.
 // --------------------------------------------------------------------------
 
 export type StartQuizRequest = {
-  themeId: QuizThemeId;
   /** Pattern enviado ao backend para auditoria/coerência. */
   pattern?: readonly QuizLevel[];
 };
@@ -147,13 +146,14 @@ export type StartQuizResponse = {
  * Solicita as 10 questões da tentativa.
  *
  * Backend (quando configurado): `POST /quiz/start` (ver `BACKEND-INTEGRATION.md`).
- * Modo offline: usa `pickMixedQuestions` localmente.
+ * Modo offline: usa `pickMixedQuestionsFromBank` localmente.
  */
-export async function startQuiz(req: StartQuizRequest): Promise<StartQuizResponse> {
+export async function startQuiz(req: StartQuizRequest = {}): Promise<StartQuizResponse> {
+  const pattern = req.pattern ?? QUIZ_LEVEL_PATTERN;
   const base = getApiBase();
   if (!base) {
     return {
-      questions: pickMixedQuestions(req.themeId, req.pattern ?? QUIZ_LEVEL_PATTERN),
+      questions: pickMixedQuestionsFromBank(pattern),
     };
   }
 
@@ -163,9 +163,8 @@ export async function startQuiz(req: StartQuizRequest): Promise<StartQuizRespons
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          themeId: req.themeId,
-          pattern: req.pattern ?? QUIZ_LEVEL_PATTERN,
-          count: (req.pattern ?? QUIZ_LEVEL_PATTERN).length,
+          pattern,
+          count: pattern.length,
         }),
       })
     );
@@ -178,10 +177,9 @@ export async function startQuiz(req: StartQuizRequest): Promise<StartQuizRespons
       throw new QuizApiError('Resposta inválida do servidor (questions vazias).', 'invalid_response');
     }
 
-    const pattern = req.pattern ?? QUIZ_LEVEL_PATTERN;
     const parsed: QuizQuestion[] = [];
     rawList.forEach((raw, i) => {
-      const q = parseQuizQuestion(raw, req.themeId, pattern[i] ?? 'easy');
+      const q = parseQuizQuestion(raw, 'languages', pattern[i] ?? 'easy');
       if (q) parsed.push(q);
     });
     if (parsed.length === 0) {
